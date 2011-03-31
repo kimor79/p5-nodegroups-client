@@ -30,6 +30,7 @@ use warnings;
 use Config::Simple;
 use JSON::DWIW;
 use LWP::UserAgent;
+use URI::Escape;
 
 ##
 ## Variables
@@ -166,11 +167,24 @@ Returns a ref to data
 =cut
 
 	my ($self, $type, $path, $params) = @_;
+	my @query;
+	$path =~ s|^/||;
 
 	$Nodegroups::Client::errstr = '';
 
-	my $url;
-	# TODO: build $url
+	my $url = $self->get_param('uri', $type);
+	$url =~ s|/$||;
+	$url .= '/' . $path;
+
+	if(defined($params)) {
+		while(my ($key, $value) = each(%{$params})) {
+			push(@query, sprintf("%s=%s", $key,
+				uri_escape_utf8($value)));
+		}
+	}
+
+	push(@query, 'outputFormat=json');
+	$url .= '?' . join('&', @query);
 
 	my $response = $self->{'ua'}->get($url);
 
@@ -196,7 +210,7 @@ Returns a ref to data
 
 sub api_post {
 
-=item api_post($type, $path, $params)
+=item api_post($type, $path, $params, $get)
 
 Generic method to POST to a nodegroups API.
 
@@ -204,12 +218,25 @@ Returns a ref of data.
 
 =cut
 
-	my ($self, $type, $path, $params) = @_;
+	my ($self, $type, $path, $params, $get) = @_;
+	my @query;
+	$path =~ s|^/||;
 
 	$Nodegroups::Client::errstr = '';
 
-	my $url;
-	# TODO: build $url
+	my $url = $self->get_param('uri', $type);
+	$url =~ s|/$||;
+	$url .= '/' . $path;
+
+	if(defined($get)) {
+		while(my ($key, $value) = each(%{$get})) {
+			push(@query, sprintf("%s=%s", $key,
+				uri_escape_utf8($value)));
+		}
+	}
+
+	push(@query, 'outputFormat=json');
+	$url .= '?' . join('&', @query);
 
 	my $response = $self->{'ua'}->post($url, $params);
 
