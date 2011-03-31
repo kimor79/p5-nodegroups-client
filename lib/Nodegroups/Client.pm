@@ -329,13 +329,22 @@ Return the value of given parameter.
 
 =cut
 
-	my ($self, $param) = @_;
+	my ($self, $param, $sub) = @_;
+	my $message = 'Unknown parameter: ' . $param;
 
 	if(exists($PARAMS{$param})) {
-		return $PARAMS{$param};
+		if(defined($sub)) {
+			if(exists($PARAMS{$param}{$sub})) {
+				return $PARAMS{$param}{$sub};
+			}
+
+			$message .= ' - ' . $sub;
+		} else {
+			return $PARAMS{$param};
+		}
 	}
 
-	return _errstr('Unknown parameter: ' . $param);
+	return _errstr($message);
 }
 
 sub set_param {

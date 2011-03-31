@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 our $PACKAGE;
 
@@ -21,6 +21,9 @@ my $obj = $PACKAGE->new();
 
 $got = $obj->get_param('user_agent');
 like($got, '/Nodegroups::Client\/[\d.]+/', 'user_agent');
+
+$got = $obj->get_param('uri', 'ro');
+is($got, 'http://localhost/api/v1', 'uri - ro');
 
 $got = $obj->get_param('foobar');
 is($got, undef, 'invalid param');
