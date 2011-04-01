@@ -282,7 +282,8 @@ Returns an array of nodegroups
 		$opts->{'sortField'} = 'order';
 	}
 
-	my $data = $self->api_get('ro', 'r/list_nodegroups.php', $opts);
+	my $data = $self->api_get('ro', 'r/list_nodegroups_from_node.php',
+		$opts);
 
 	if(defined($data) && defined($data->{'records'})) {
 		my @nodegroups;
