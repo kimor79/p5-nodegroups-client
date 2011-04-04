@@ -266,7 +266,7 @@ sub get_nodegroups_from_node {
 
 Get the nodegroups a node is a member of, with an optional sorting by 'app'
 
-Returns an array of nodegroups
+Returns an array ref of nodegroups
 
 =cut
 
@@ -291,7 +291,7 @@ Returns an array of nodegroups
 			push(@nodegroups, $record->{'nodegroup'});
 		}
 
-		return @nodegroups;
+		return \@nodegroups;
 	}
 
 	return undef;
@@ -301,7 +301,7 @@ sub get_nodes_from_expression {
 
 =item get_nodes_from_expression($expression)
 
-Parse an expression and return an array of members
+Parse an expression and return an array ref of members
 
 =cut
 
@@ -317,7 +317,7 @@ Parse an expression and return an array of members
 			push(@nodes, $record->{'node'});
 		}
 
-		return @nodes;
+		return \@nodes;
 	}
 
 	return undef;
@@ -327,7 +327,7 @@ sub get_nodes_from_nodegroup {
 
 =item get_nodes_from_nodegroup($nodegroup)
 
-Return an array of members from given nodegroup.
+Return an array ref of members from given nodegroup.
 
 =cut
 
@@ -343,7 +343,7 @@ Return an array of members from given nodegroup.
 			push(@nodes, $record->{'node'});
 		}
 
-		return @nodes;
+		return \@nodes;
 	}
 
 	return undef;
