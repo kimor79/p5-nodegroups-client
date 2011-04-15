@@ -1,4 +1,6 @@
 Build
+Makefile.PL
+META.yml
 MYMETA.yml
 _build/
 blib/
