@@ -55,8 +55,8 @@ file.
 =item uri
 
 Hash of uri's to use.
-  'ro' => 'http://localhost/api/v1',
-  'rw' => 'http://localhost/api/v1',
+  'ro' => 'http://localhost/api',
+  'rw' => 'http://localhost/api',
 
 =item user_agent
 
@@ -70,8 +70,8 @@ my $DEFAULT_CONFIG_FILE = '/usr/local/etc/nodegroups_client/config.ini';
 my $JSON;
 my %PARAMS = (
 	'uri' => {
-		'ro' => 'http://localhost/api/v1',
-		'rw' => 'http://localhost/api/v1',
+		'ro' => 'http://localhost/api',
+		'rw' => 'http://localhost/api',
 	},
 	'user_agent' => __PACKAGE__ . '/' . $VERSION,
 );
@@ -282,7 +282,7 @@ Returns an array ref of nodegroups
 		$opts->{'sortField'} = 'order';
 	}
 
-	my $data = $self->api_get('ro', 'r/list_nodegroups_from_node.php',
+	my $data = $self->api_get('ro', 'v1/r/list_nodegroups_from_node.php',
 		$opts);
 
 	if(defined($data) && defined($data->{'records'})) {
@@ -307,7 +307,7 @@ Parse an expression and return an array ref of members
 
 	my ($self, $expr) = @_;
 
-	my $data = $self->api_post('ro', 'r/list_nodes.php', {
+	my $data = $self->api_post('ro', 'v1/r/list_nodes.php', {
 		'expression' => $expr,
 	});
 
@@ -333,7 +333,7 @@ Return an array ref of members from given nodegroup.
 
 	my ($self, $nodegroup) = @_;
 
-	my $data = $self->api_get('ro', 'r/list_nodes.php', {
+	my $data = $self->api_get('ro', 'v1/r/list_nodes.php', {
 		'nodegroup' => $nodegroup,
 	});
 
