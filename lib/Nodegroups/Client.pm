@@ -40,7 +40,7 @@ BEGIN {
 	$Nodegroups::Client::errstr = '';
 }
 
-my $VERSION = '0.02';
+my $VERSION = '0.03';
 
 =head1 OPTIONS
 
@@ -282,7 +282,7 @@ Returns an array ref of nodegroups
 		$opts->{'sortField'} = 'order';
 	}
 
-	my $data = $self->api_get('ro', 'v1/r/list_nodegroups_from_node.php',
+	my $data = $self->api_get('ro', 'v1/r/list_nodegroups_from_nodes.php',
 		$opts);
 
 	if(defined($data) && defined($data->{'records'})) {
