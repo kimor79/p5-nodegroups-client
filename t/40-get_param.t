@@ -32,7 +32,7 @@ $got = $obj->get_param('user_agent');
 like($got, '/Nodegroups::Client\/[\d.]+/', 'user_agent');
 
 $got = $obj->get_param('uri', 'ro');
-is($got, 'http://localhost/api/v1', 'uri - ro');
+is($got, 'http://localhost/api', 'uri - ro');
 
 $got = $obj->get_param('foobar');
 is($got, undef, 'invalid param');
