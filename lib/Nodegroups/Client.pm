@@ -40,7 +40,7 @@ BEGIN {
 	$Nodegroups::Client::errstr = '';
 }
 
-my $VERSION = '0.03';
+my $VERSION = '0.04';
 
 =head1 OPTIONS
 
