@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 our $PACKAGE;
 
@@ -18,6 +18,9 @@ BEGIN {
 my $got;
 
 my $obj = $PACKAGE->new();
+
+$got = $obj->set_param('ssl_cafile', 'foobar');
+is($got, 'foobar', 'ssl_cafile');
 
 $got = $obj->set_param('user_agent', 'foobar');
 is($got, 'foobar', 'user_agent');

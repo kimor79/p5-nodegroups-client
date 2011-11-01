@@ -52,6 +52,20 @@ Use this to get other options from specified configuration file.
 Options passed to new() will override options passed via this configuration
 file.
 
+=item ssl_cafile
+
+The path to a file containing Certificate Authority certificates.
+
+=item ssl_capath
+
+The path to a directory containing files containing Certificate Authority
+certificates.
+
+=item ssl_verify_hostname
+
+When TRUE LWP will for secure protocol schemes ensure it connects to servers
+that have a valid certificate matching the expected hostname.
+
 =item uri
 
 Hash of uri's to use.
@@ -69,6 +83,9 @@ Sets the User Agent request header. Default is Nodegroups::Client/$version
 my $DEFAULT_CONFIG_FILE = '/usr/local/etc/nodegroups_client/config.ini';
 my $JSON;
 my %PARAMS = (
+	'ssl_cafile' => '',
+	'ssl_capath' => '',
+	'ssl_verify_hostname' => '',
 	'uri' => {
 		'ro' => 'http://localhost/api',
 		'rw' => 'http://localhost/api',
@@ -123,6 +140,14 @@ On failure, inspect $Nodegroups::Client::errstr.
 
 		delete($options->{'config_file'});
 
+		if(exists($options->{'ssl_cafile'})) {
+			$PARAMS{'ssl_cafile'} = $options->{'ssl_cafile'};
+		}
+
+		if(exists($options->{'ssl_capath'})) {
+			$PARAMS{'ssl_capath'} = $options->{'ssl_capath'};
+		}
+
 		if(exists($options->{'uri'}) &&
 				ref($options->{'uri'}) eq 'HASH') {
 			if(exists($options->{'uri'}{'ro'})) {
@@ -137,10 +162,28 @@ On failure, inspect $Nodegroups::Client::errstr.
 		if(exists($options->{'user_agent'})) {
 			$PARAMS{'user_agent'} = $options->{'user_agent'};
 		}
+
+		if(exists($options->{'ssl_verify_hostname'})) {
+			$PARAMS{'ssl_verify_hostname'} =
+				$options->{'ssl_verify_hostname'};
+		}
 	}
 
 	$JSON = JSON::DWIW->new();
 	$self->{'ua'} = LWP::UserAgent->new('agent' => $PARAMS{'user_agent'});
+
+	if(exists($PARAMS{'ssl_cafile'})) {
+		$self->{'ua'}->ssl_opts('SSL_ca_file' => $PARAMS{'ssl_cafile'});
+	}
+
+	if(exists($PARAMS{'ssl_capath'})) {
+		$self->{'ua'}->ssl_opts('SSL_ca_path' => $PARAMS{'ssl_capath'});
+	}
+
+	if(exists($PARAMS{'ssl_verify_hostname'})) {
+		$self->{'ua'}->ssl_opts('verify_hostname' =>
+			$PARAMS{'ssl_verify_hostname'});
+	}
 
 	return bless($self, $class);
 }
@@ -431,6 +474,21 @@ sub _parse_config {
 	my $uri_rw = $config->param('uri.rw');
 	if(defined($uri_rw)) {
 		$PARAMS{'uri'}{'rw'} = $uri_rw;
+	}
+
+	my $ssl_cafile = $config->param('perl.ssl_cafile');
+	if(defined($ssl_cafile)) {
+		$PARAMS{'ssl_cafile'} = $ssl_cafile;
+	}
+
+	my $ssl_capath = $config->param('perl.ssl_capath');
+	if(defined($ssl_capath)) {
+		$PARAMS{'ssl_capath'} = $ssl_capath;
+	}
+
+	my $ssl_hostname = $config->param('perl.ssl_verify_hostname');
+	if(defined($ssl_hostname)) {
+		$PARAMS{'ssl_verify_hostname'} = $ssl_hostname;
 	}
 
 	my $user_agent = $config->param('perl.user_agent');

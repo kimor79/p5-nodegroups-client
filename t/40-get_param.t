@@ -1,6 +1,6 @@
 use strict;
 
-use Test::More tests => 5;
+use Test::More tests => 8;
 
 our $PACKAGE;
 
@@ -18,6 +18,15 @@ BEGIN {
 my $got;
 
 my $obj = $PACKAGE->new();
+
+$got = $obj->get_param('ssl_cafile');
+is($got, '', 'ssl_cafile');
+
+$got = $obj->get_param('ssl_capath');
+is($got, '', 'ssl_capath');
+
+$got = $obj->get_param('ssl_verify_hostname');
+is($got, '', 'ssl_verify_hostname');
 
 $got = $obj->get_param('user_agent');
 like($got, '/Nodegroups::Client\/[\d.]+/', 'user_agent');
