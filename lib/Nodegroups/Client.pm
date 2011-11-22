@@ -172,18 +172,22 @@ On failure, inspect $Nodegroups::Client::errstr.
 	$JSON = JSON::DWIW->new();
 	$self->{'ua'} = LWP::UserAgent->new('agent' => $PARAMS{'user_agent'});
 
-	if(exists($PARAMS{'ssl_cafile'})) {
-		$self->{'ua'}->ssl_opts('SSL_ca_file' => $PARAMS{'ssl_cafile'});
-	}
+	eval {
+		if(exists($PARAMS{'ssl_cafile'})) {
+			$self->{'ua'}->ssl_opts('SSL_ca_file' =>
+				$PARAMS{'ssl_cafile'});
+		}
 
-	if(exists($PARAMS{'ssl_capath'})) {
-		$self->{'ua'}->ssl_opts('SSL_ca_path' => $PARAMS{'ssl_capath'});
-	}
+		if(exists($PARAMS{'ssl_capath'})) {
+			$self->{'ua'}->ssl_opts('SSL_ca_path' =>
+				$PARAMS{'ssl_capath'});
+		}
 
-	if(exists($PARAMS{'ssl_verify_hostname'})) {
-		$self->{'ua'}->ssl_opts('verify_hostname' =>
-			$PARAMS{'ssl_verify_hostname'});
-	}
+		if(exists($PARAMS{'ssl_verify_hostname'})) {
+			$self->{'ua'}->ssl_opts('verify_hostname' =>
+				$PARAMS{'ssl_verify_hostname'});
+		}
+	};
 
 	return bless($self, $class);
 }
